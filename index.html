@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 bar chart example</title>
+        <script type="text/javascript" src="js/d3.js"></script>
+    </head>
+    <body>
+        <h2>ES fenwick% over final 25 games of 2015-16 regular season</h2>
+        <script type="text/javascript">
+          var dataset = [
+            { "team": "LA",
+            "saf": 56.18 },
+            { "team": "PIT",
+            "saf": 55.67
+            },
+            { "team": "STL",
+            "saf": 54.47
+            },
+            { "team": "SJ",
+            "saf": 53.96
+            },
+            { "team": "PHI",
+            "saf": 53.19
+            },
+            { "team": "WSH",
+            "saf": 52.83
+            },
+            { "team": "NSH",
+            "saf": 52.32
+            },
+            { "team": "ANA",
+            "saf": 52.24
+            },
+            { "team": "DET",
+            "saf": 51.63
+            },
+            { "team": "DAL",
+            "saf": 51.19
+            },
+            { "team": "FLA",
+            "saf": 51.17
+            },
+            { "team": "TB",
+            "saf": 49.16
+            },
+            { "team": "CHI",
+            "saf": 48.88
+            }
+            ,{ "team": "NYI",
+            "saf": 47.95
+            }
+            ,{ "team": "MN",
+            "saf": 47.25
+            }
+            ,{ "team": "NYR",
+            "saf": 44.96
+            }
+           ];                        //Initialize empty array
+
+          var w = 1000;
+          var h = 250;
+          var barPadding = 2;
+
+          //Create SVG element
+          var svg = d3.select("body")
+                      .append("svg")
+                      .attr("width", w)
+                      .attr("height", h);
+
+          svg.selectAll("rect")
+               .data(dataset)
+               .enter()
+               .append("rect")
+               .attr("x", function(d, i){
+                 return i * (w / dataset.length);
+               })
+               .attr("y", function(d){
+                 return h - (d.saf * 4);
+               })
+               .attr("width", w / dataset.length - barPadding)
+               .attr("height", function(d){
+                 return d.saf * 4;
+               })
+               .attr("fill", function(d, i){
+                 return "rgb(50, 50, " + (i * 20) + ")";  // weight this more
+               });
+
+           svg.selectAll("text")
+               .data(dataset)
+               .enter()
+               .append("text")
+               .text(function(d){
+                 return d.team + " " + d.saf;
+               })
+               .attr("x", function(d, i){
+                 return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+               })
+               .attr("y", function(d){
+                 return h - (d.saf * 4) + 14;
+               })
+               .attr("font-family", "sans-serif")
+               .attr("font-size", "11px")
+               .attr("fill", "white")
+               .attr("text-anchor", "middle");
+        </script>
+    </body>
+</html>
