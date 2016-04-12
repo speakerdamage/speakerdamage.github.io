@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Final Countdown</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
+    <style>
+      html, body {
+          height: 100%;
+      }
+
+      body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          display: table;
+          font-size: 20px;
+          font-weight: 100;
+          font-family: 'Lato';
+          background: url(/images/time-left.jpg) no-repeat 0 0;
+      }
+
+      .container {
+          text-align: center;
+          display: table-cell;
+          vertical-align: middle;
+      }
+
+      .content {
+          text-align: center;
+          display: inline-block;
+      }
+
+      .title {
+          font-size: 96px;
+      }
+      .subtitle {
+          font-size: 40px;
+          padding-bottom: 20px;
+      }
+      #days {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+    function fixIntegers(integer){
+    		if (integer < 0)
+    			integer = 0;
+    		if (integer < 10)
+    			return "0" + integer;
+    		return "" + integer;
+    	}
+    	function delayShow() {
+    		var secs = 1000;
+    		setTimeout('jQuery(".hideAll").css("visibility","visible");', secs);
+    	}
+
+      $(document).ready(function(){
+
+    		setInterval(function(){
+    			var future = new Date("Nov 29 2056 23:59:59");
+    			var now = new Date();
+    			var difference = Math.floor((future.getTime() - now.getTime()) / 1000);
+
+    			var seconds = fixIntegers(difference % 60);
+    			difference = Math.floor(difference / 60);
+
+    			var minutes = fixIntegers(difference % 60);
+    			difference = Math.floor(difference / 60);
+
+    			var hours = fixIntegers(difference % 24);
+    			difference = Math.floor(difference / 24);
+
+          $.fn.digits = function(){
+              return this.each(function(){
+                  $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") );
+              })
+          }
+
+    			var days = difference;
+    			if(future.getDate() == now.getDate()){ // last day
+    				$("#final-day").html('FINAL <br class="visible-small">DAY<span class="hidden-small">:</span>').css({'color':'#c70a0a', 'font-weight':'bold', 'font-size':'1.1em', 'line-height':'1.1em'});
+    				$("#hours").text(hours);
+    				$("#minutes").text(minutes);
+    				$("#seconds").text(seconds);
+    			} else if( now.getDate() > future.getDate() ){
+    				$('.hideAll').hide();
+    			} else {
+    				$("#days").text(days).digits();
+    				$("#hours").text(hours);
+    				$("#minutes").text(minutes);
+    				$("#seconds").text(seconds);
+    				if(now.getDate() == 17){ // one day remaining
+    					$('#s').hide();
+    				}
+    			}
+
+    		}, 1000);
+    		delayShow();
+    	});
+    </script>
+    <div class="container">
+      <div class="hideAll" style="visibility: visible;">
+        <div class="title">Time left to live</div>
+        <div class="subtitle">*based on lifespan of avg American male</div>
+        <div id="final-day"><span id="days" class="number"></span> DAY<span id="s">S</span></div>
+        <div class="hours-wrap"><span id="hours" class="number"></span> HOURS</div>
+        <div class="minutes-wrap"><span id="minutes" class="number"></span> MINUTES</div>
+        <div class="seconds-wrap"><span id="seconds" class="number"></span> SECONDS</div>
+      </div>
+    </div>
+  </body>
+</html>
